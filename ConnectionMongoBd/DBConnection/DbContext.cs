@@ -3,30 +3,42 @@ using MongoDB.Driver;
 
 namespace MongodbServices
 {
-    public class MOngoDBService
+    public class MongoDBService
     {
+        private readonly IMongoDatabase _database;
 
-        // _userContained hole data from MongoDB
-        private readonly IMongoCollection<User> _userCollection;
-
-        public MOngoDBService(IConfiguration config)
+        public MongoDBService(IConfiguration config)
         {
             var client = new MongoClient(config["ConnectingStringDatabase:ConnectionString"]);
-            var database = client.GetDatabase(config["ConnectingStringDatabase:DatabaseName"]);
-            _userCollection = database.GetCollection<User>(config["ConnectingStringDatabase:UserCollection"]);
+            _database = client.GetDatabase(config["ConnectingStringDatabase:DatabaseName"]);
         }
 
+        // Generic method to get any collection
 
-        //For GetMethod
-        public async Task <List<User>> GetUserAsync()
+        //IMongoCollection<T> comes from MongoDB.Driver namespace.
+        //GetCollection is custome name 
+        // This function point reference of collection and we perfome crud operation on this collection
+        public IMongoCollection<T> GetCollection<T>(string collectionName)
         {
-            return await _userCollection.Find(user => true).ToListAsync();
+            return _database.GetCollection<T>(collectionName);
         }
 
-        public async Task CreatedUserAsync(User user)
-        {
-            await _userCollection.InsertOneAsync(user);
-        }
+        // For User Collection
+        
 
+        
+
+        // Example for another collection (e.g., Orders)
+        //public async Task<List<Order>> GetOrdersAsync()
+        //{
+        //    var orders = GetCollection<Order>("OrderCollection");
+        //    return await orders.Find(order => true).ToListAsync();
+        //}
+
+        //public async Task CreateOrderAsync(Order order)
+        //{
+        //    var orders = GetCollection<Order>("OrderCollection");
+        //    await orders.InsertOneAsync(order);
+        //}
     }
 }
