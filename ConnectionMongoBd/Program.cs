@@ -1,3 +1,4 @@
+using MongodbServices;
 using System.Data.Common;
 
 
@@ -11,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //ConnectionMongoBd.DBConnection
-builder.Services.AddSingleton<MongodbServices.MOngoDBService>();
+builder.Services.AddSingleton<MongoDBService>();
 
 //builder.Services.Configure<BookStoreDatabaseSettings>(
 //    builder.Configuration.GetSection("ConnectingStringDatabase"));
